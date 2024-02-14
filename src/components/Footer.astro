@@ -1,0 +1,63 @@
+---
+import Github from "../icons/Github.icon.astro";
+import Linkedin from "../icons/Linkedin.icon.astro";
+
+---
+
+<footer class="fixed w-full bottom-0 bg-[#13151a] z-[200] opacity-100 visible animate-slide-up">
+    <div class="size-full max-w-[1360px] mx-auto h-12 flex justify-between items-center px-6">
+        <p class="text-sm text-white">
+            Hecho por <a href="https://matiasgonta.vercel.app/" target="_blank" class="underline">Matías Gonta</a> • © {new Date().getFullYear()} Wiki Nations. Todos los derechos reservados.
+        </p>
+        <ul class="flex gap-2.5 items-center ml-4">
+            <li class="group relative">
+                            <a
+                                href="https://www.linkedin.com/in/matías-gonta/"
+                                target="_blank"
+                                class="text-white size-5"
+                            >
+                                <Linkedin />
+                            </a>
+                            <span class="text-nowrap transition-[top] rounded-md top-0 -left-6 text-[#a1a9bb] bg-white border border-[#ddd] px-1.5 py-0.5 text-sm absolute invisible opacity-0 h-0 group-hover:h-fit group-hover:opacity-100 group-hover:visible group-hover:-top-10">
+                                Linkedin
+                            </span>
+            </li>
+            <li class="group relative">
+                            <a
+                                href="https://github.com/MatiasGonta/tiny-target"
+                                target="_blank"
+                                class="text-white size-5"
+                            >
+                                <Github />
+                            </a>
+                            <span class="text-nowrap transition-[top] rounded-md top-0 -left-5 text-[#a1a9bb] bg-white border border-[#ddd] px-1.5 py-0.5 text-sm absolute invisible opacity-0 h-0 group-hover:h-fit group-hover:opacity-100 group-hover:visible group-hover:-top-10">
+                                Github
+                            </span>
+            </li>
+        </ul>
+    </div>
+</footer>
+
+<script>
+    let lastScrollPosition = 0;
+    const footer = document.querySelector("footer");
+
+    window.addEventListener("scroll", () => {
+        const currentScrollPosition = window.scrollY;
+
+        if (currentScrollPosition > lastScrollPosition) {
+            // Scrolling down and hidden
+            footer!.classList.remove('animate-slide-up');
+            footer!.classList.add('animate-slide-down');
+            setTimeout(() => {
+                footer!.classList.add('h-0');
+            }, 200);
+        } else {
+            // Scrolling up and show
+            footer!.classList.remove('h-0','animate-slide-down');
+            footer!.classList.add('animate-slide-up');
+        }
+
+        lastScrollPosition = currentScrollPosition;
+    });
+</script>
