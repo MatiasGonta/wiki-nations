@@ -1,6 +1,8 @@
 ---
-import Layout from "../../layouts/Layout.astro";
 import { fetchCountries, fetchCountryByName } from "../../services";
+import ContinentBadge from "../../components/ContinentBadge.astro";
+import Layout from "../../layouts/Layout.astro";
+import { slide } from 'astro:transitions';
 
 export async function getStaticPaths() {
 	const { data: countries } = await fetchCountries();
@@ -16,9 +18,16 @@ const { id } = Astro.params;
 
 // Fetch country with id
 const { data: country } = await fetchCountryByName(id!);
+console.log({ country: country[0] });
 ---
 
 <Layout title={`${id} | Wiki Nations`}>
 	<main class="w-full h-screen flex justify-center items-center">
+		<div class="w-[500px] h-[350px]" transition:name={country[0].name.common + "badge"}>
+			<img
+				src={country[0].flags.svg}
+				alt={country[0].flags.alt || country[0].name.common}
+			/>
+		</div>
 	</main>
 </Layout>

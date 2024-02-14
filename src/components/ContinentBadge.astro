@@ -1,0 +1,64 @@
+---
+import Africa from "../icons/Africa.icon.astro";
+import Americas from "../icons/Americas.icon.astro";
+import Antarctic from "../icons/Antarctic.icon.astro";
+import Asia from "../icons/Asia.icon.astro";
+import Europe from "../icons/Europe.icon.astro";
+import Oceania from "../icons/Oceania.astro";
+import type { Continents } from "../types";
+
+    interface Props {
+        name: Continents;
+        template?: 'card';
+    }
+
+    const { name, template } = Astro.props;
+
+    const continentBadges = {
+        Africa: {
+            outerWrapperClass: "-left-[70%] -top-[20%]",
+            innerWrapperClass: "size-[500px]",
+            icon: Africa,
+        },
+        Europe: {
+            outerWrapperClass: "-left-[95%] top-[0%] group-hover:-left-[110%]",
+            innerWrapperClass: "size-[700px]",
+            icon: Europe,
+        },
+        Americas: {
+            outerWrapperClass: "-left-[10%] -top-[5%] group-hover:left-[0%] group-hover:top-[20%]",
+            innerWrapperClass: "size-[350px]",
+            icon: Americas,
+        },
+        Asia: {
+            outerWrapperClass: "-left-[65%] top-[10%] group-hover:-left-[80%]",
+            innerWrapperClass: "size-[350px]",
+            icon: Asia,
+        },
+        Oceania: {
+            outerWrapperClass: "-left-[185%] -top-[60%] group-hover:-left-[225%] group-hover:top-[-100%]",
+            innerWrapperClass: "size-[700px]",
+            icon: Oceania,
+        },
+        Antarctic: {
+            outerWrapperClass: "-left-[10%] top-[10%] group-hover:left-[0%] group-hover:top-[0%]",
+            innerWrapperClass: "size-[125px]",
+            icon: Antarctic,
+        }
+    };
+
+    const Icon = continentBadges[name].icon;
+---
+
+{
+    template === 'card'
+        ? (
+            <div class={`max-w-[500px] max-h-[500px] absolute group-hover:rotate-12 transition-all duration-300 group-hover:scale-150 ${continentBadges[name].outerWrapperClass}`}>
+                <div class={`flex gap-1 ${continentBadges[name].innerWrapperClass}`}>
+                    <Icon />
+                </div>
+            </div>
+        ) : (
+            <Icon />
+        )
+}

@@ -6,7 +6,9 @@ export enum FilterTypes {
     SORT = 'sort'
 }
 
-export type Filter = {
-    name: FilterTypes;
-    value: Continents | "World" | "asc" | "desc" | "default";
+export type FilterSelectOption = {
+    value: Continents | "asc" | "desc" | undefined;
+    label: string;
+    icon?: any;
+    iconClass?: string;
 }

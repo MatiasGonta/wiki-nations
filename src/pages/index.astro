@@ -1,38 +1,92 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Card from "../components/Card.astro";
 import { fetchCountries } from "../services";
-import Countries from "../components/Countries";
-import Filters from "../components/Filters";
+import type { RawCountry } from "../types";
 
-// Fetch countries
-const { data } = await fetchCountries();
+// Get countries
+const { data: rawCountries } = await fetchCountries();
 
-let countries = data;
+// Alphabetical sort
+let filteredCountries: RawCountry[] = rawCountries.sort((countryA: RawCountry, countryB: RawCountry) => {
+        const nameA = countryA.name.common.toUpperCase();
+        const nameB = countryB.name.common.toUpperCase();
 
-// function searchCountries() {
-// 	const filteredCountries = countries.filter((country) =>
-//     	country.name.common.toLowerCase().includes(filter.toLowerCase())
-// 	);
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    }
+);
 
-// }
+// Get query params
+const searchQuery = Astro.url.searchParams.get("q");
+const regionQuery = Astro.url.searchParams.get("region");
+const sortQuery = Astro.url.searchParams.get("sort");
+
+// Handle filters
+if (regionQuery && (regionQuery === "Africa" || regionQuery === "Europe" || regionQuery === "Americas" || regionQuery === "Asia" || regionQuery === "Oceania" || regionQuery === "Antarctic")) {
+	filteredCountries = filteredCountries.filter(
+		(country) => country.region.toLowerCase() === regionQuery.toLowerCase(),
+	);
+}
+
+if (searchQuery && searchQuery.trim() !== "" && searchQuery.trim().length > 0) {
+	filteredCountries = filteredCountries.filter((country) =>
+		country.name.common.toLowerCase().includes(searchQuery.toLowerCase()),
+	);
+}
+
+if (sortQuery && (sortQuery === "asc" || sortQuery === "desc")) {
+	if (sortQuery === "asc") {
+		filteredCountries = filteredCountries.filter(
+			(country) => country.population > 0,
+		);
+		filteredCountries.sort(
+			(countryA, countryB) => countryA.population - countryB.population,
+		);
+	} else {
+		filteredCountries = filteredCountries.filter(
+			(country) => country.population > 0,
+		);
+		filteredCountries.sort(
+			(countryA, countryB) => countryB.population - countryA.population,
+		);
+	}
+}
 ---
 
 <Layout title="Wiki Nations">
-	<header class="w-full max-w-[1300px] mx-auto flex flex-col gap-2 shadow-lg mt-8 px-8 min-[1300px]:px-0">
-		<div class="w-full">
-			<h1 class="text-3xl font-bold text-white">Wiki Nations</h1>
-		</div>
-		<div class="w-full">
-			<Filters client:load />
-		</div>
-	</header>
+	<Header />
 	<main class="w-full flex justify-center items-center bg-[#13151a]">
 		<section>
 			<article>
 				{
-					countries && countries !== null && countries.length > 0
-					? <Countries rawCountries={countries} client:load />
-					: <div>Loading...</div>
+					filteredCountries && filteredCountries.length > 0
+						? (
+							<ul class="grid gap-8 grid-cols-1 grid-rows-auto text-white w-fit h-full p-8 md:grid-cols-2 lg:grid-cols-3 min-[1300px]:grid-cols-4">
+								{
+									filteredCountries.map((country) => (
+										<Card
+											country={{
+												name: country.name.common,
+												flag: country.flags.svg,
+												region: country.region,
+												subregion: country.subregion,
+												capital: country.capital,
+												population: country.population,
+											}}
+										/>
+									))
+								}
+							</ul>
+						) : (
+							<div>No countries found</div>
+						)
 				}
 			</article>
 		</section>

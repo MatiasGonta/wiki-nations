@@ -1,0 +1,68 @@
+---
+import { FilterTypes, type FilterSelectOption } from "../types";
+import ArrowDown from "../icons/ArrowDown.icon.astro";
+import { filterParamsUrlGenerator } from "../utils";
+
+interface Props {
+    filterType: FilterTypes.REGION | FilterTypes.SORT;
+    options: FilterSelectOption[];
+}
+
+const { filterType, options } = Astro.props;
+
+// Get query params
+const queryParams = {
+    search: Astro.url.searchParams.get("q"),
+    region: Astro.url.searchParams.get("region"),
+    sort: Astro.url.searchParams.get("sort"),
+}
+---
+
+<div class="relative w-[150px]">
+    <button class="flex gap-1.5 justify-between items-center px-2 w-[150px] h-10 bg-white border-none rounded-md">
+        <slot name="label" />
+        <div class="size-5 mt-0.5">
+            <ArrowDown />
+        </div>
+    </button>
+
+    <div class="group absolute top-0 pt-12 z-[200]">
+        <div class="transition-[height] overflow-hidden h-0 opacity-0 invisible w-[150px] p-2.5 rounded-md bg-white border border-[#ddd] group-hover:h-auto group-hover:opacity-100 group-hover:visible">
+            <ul class="w-full flex flex-col gap-1">
+                {
+                    options.map(({ label, value, icon: Icon, iconClass }: FilterSelectOption) => {
+                        const newQueryParams = filterParamsUrlGenerator({
+                            search: queryParams.search,
+                            region: filterType !== FilterTypes.REGION ? queryParams.region : value,
+                            sort: filterType !== FilterTypes.SORT ? queryParams.sort : value,
+                        });
+
+                        return (
+                            <li>
+                                <a href={newQueryParams ? `/?${newQueryParams}` : "/"} class={`
+                                            w-full h-12 flex items-center cursor-pointer gap-2.5 p-1.5 rounded border
+                                            ${
+                                                queryParams[filterType] &&
+                                                queryParams[filterType] === value
+                                                    ? "bg-slate-200 border-[#ddd]"
+                                                    : "border-white hover:bg-slate-200 hover:border-[#ddd]"
+                                            }
+                                        `}
+                                >
+                                    {Icon && iconClass && (
+                                        <div class="relative size-10 overflow-hidden">
+                                            <div class={iconClass}>
+                                                <Icon />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <span>{label}</span>
+                                </a>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
+        </div>
+    </div>
+</div>

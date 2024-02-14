@@ -1,0 +1,112 @@
+---
+import { FilterTypes, type FilterSelectOption } from "../types";
+import Antarctic from "../icons/Antarctic.icon.astro";
+import Americas from "../icons/Americas.icon.astro";
+import Europe from "../icons/Europe.icon.astro";
+import Africa from "../icons/Africa.icon.astro";
+import World from "../icons/World.icon.astro";
+import Oceania from "../icons/Oceania.astro";
+import Asia from "../icons/Asia.icon.astro";
+import Spin from "../icons/Spin.icon.astro";
+import FilterSelect from "./FilterSelect.astro";
+import Search from "./Search.astro";
+
+    const regionOptions: FilterSelectOption[] = [
+        {
+            value: undefined,
+            label: "World",
+            icon: World,
+            iconClass: "size-[50px] absolute top-[35px] -left-1"
+        },
+        {
+            value: "Africa",
+            label: "Africa",
+            icon: Africa,
+            iconClass: "size-[140px] absolute -top-[26px] -left-12"
+        },
+        {
+            value: "Asia",
+            label: "Asia",
+            icon: Asia,
+            iconClass: "size-[110px] absolute -top-0 -left-14"
+        },
+        {
+            value: "Europe",
+            label: "Europe",
+            icon: Europe,
+            iconClass: "size-[230px] absolute -top-[13px] -left-[90px]"
+        },
+        {
+            value: "Americas",
+            label: "America",
+            icon: Americas,
+            iconClass: "size-[70px] absolute -top-0 left-1"
+        },
+        {
+            value: "Oceania",
+            label: "Oceania",
+            icon: Oceania,
+            iconClass: "size-[185px] absolute -top-[52px] -left-[135px]"
+        },
+        {
+            value: "Antarctic",
+            label: "Antarctic",
+            icon: Antarctic,
+            iconClass: "size-10 absolute -top-0 -left-0.5"
+        },
+    ];
+
+    const sortOptions: FilterSelectOption[] = [
+        {
+            value: undefined,
+            label: "Default",
+        },
+        {
+            value: "desc",
+            label: "Most populated",
+        },
+        {
+            value: "asc",
+            label: "Less populated",
+        },
+    ];
+---
+
+<header class="w-full max-w-[1300px] mx-auto flex flex-col gap-2 shadow-lg mt-8 px-8 min-[1300px]:px-0">
+    <div class="w-full relative">
+        <h1 class="text-3xl font-bold text-white">Wiki Nations</h1>
+
+        {/* Navigate loader */}
+        <div id="loader" class="hidden absolute top-1/2 -translate-y-1/2 right-0 items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-gray-500 hover:bg-gray-600 transition ease-in-out duration-150 cursor-not-allowed">
+            <div class="size-5">
+                <Spin />
+            </div>
+            <span>Loading...</span>
+        </div>
+    </div>
+    <div class="w-full">
+        <search class="w-full flex gap-2.5 flex-col items-center md:flex-row md: justify-between md:gap-0">
+            <Search />
+
+            <div class="flex items-center gap-2.5">
+                <FilterSelect filterType={FilterTypes.SORT} options={sortOptions}>
+                    <span slot="label">Sort by</span>
+                </FilterSelect>
+                <FilterSelect filterType={FilterTypes.REGION} options={regionOptions}>
+                    <span slot="label">Sort by region</span>
+                </FilterSelect>
+            </div>
+        </search>
+    </div>
+</header>
+
+<script>
+	document.addEventListener('astro:before-preparation', () => {
+	  document.getElementById('loader')!.classList.remove('hidden');
+	  document.getElementById('loader')!.classList.add('inline-flex');
+	});
+	document.addEventListener('astro:after-preparation', () => {
+        document.getElementById('loader')!.classList.remove('inline-flex');
+	  document.getElementById('loader')!.classList.add('hidden');
+	});
+</script>

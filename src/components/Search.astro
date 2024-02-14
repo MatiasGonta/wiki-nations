@@ -1,0 +1,88 @@
+---
+import SearchIcon from "../icons/Search.icon.astro";
+import Close from "../icons/Close.icon.astro";
+
+const searchQuery = Astro.url.searchParams.get("q") || '';
+---
+
+<form class="relative flex items-center gap-2.5 w-full max-w-[310px]">
+    {/* Clear btn */}
+    <button
+        type="button"
+        id="reset-btn"
+        class="group absolute top-1/2 -translate-y-1/2 left-3 flex w-8 h-full justify-center items-center bg-white z-10"
+    >
+        <div class="relative border-none bg-transparent outline-none size-5 text-[#a1a9bb] flex items-center justify-center">
+            <span class="transition-[top] rounded-md top-0 bg-white border border-[#ddd] px-1.5 py-0.5 text-sm absolute invisible opacity-0 h-0 group-hover:h-fit group-hover:opacity-100 group-hover:visible group-hover:-top-10">
+                Clear
+            </span>
+
+            <Close />
+        </div>
+    </button>
+
+    <input
+        type="text"
+        placeholder="Search for a country..."
+        name="search"
+        class="bg-white rounded-md pl-14 pr-4 py-2 w-[calc(100%-32px)] outline-none placeholder:text-[#a1a9bb]"
+        value={searchQuery}
+    />
+    <button
+        type="submit"
+        class="border-none bg-transparent outline-none size-8"
+    >
+        <span class="sr-only">Search</span>
+
+        <SearchIcon />
+    </button>
+</form>
+
+<script>
+    import { filterParamsUrlGenerator } from "../utils";
+    import { navigate } from 'astro:transitions/client';
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const region = urlParams.get("region");
+    const sort = urlParams.get("sort");
+
+    // Refs
+    const form: HTMLFormElement = document.querySelector('form')!;
+    const searchInput: HTMLInputElement = document.querySelector('input[name="search"]')!;
+    const resetButton = document.getElementById("reset-btn")!;
+
+    // Handle input value reset
+    function onResetSearch() {
+        if (searchInput.value === '' && urlParams.get("q")) {
+            const newQueryParams = filterParamsUrlGenerator({
+                search: undefined,
+                region: region,
+                sort: sort,
+            });
+
+            navigate(newQueryParams ? `/?${newQueryParams}` : "/");
+        }
+
+        searchInput.value = '';
+    }
+
+    resetButton?.addEventListener('click', onResetSearch);
+
+    // Handle form submit
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const search = searchInput.value.toString();
+
+        if (search && search.trim().length > 0) {
+            const newQueryParams = filterParamsUrlGenerator({
+                search: searchInput.value.toString(),
+                region: region,
+                sort: sort,
+            });
+
+            navigate(`/?${newQueryParams}`);
+        }
+    })
+</script>
