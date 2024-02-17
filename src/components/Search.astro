@@ -2,7 +2,7 @@
 import SearchIcon from "../icons/Search.icon.astro";
 import Close from "../icons/Close.icon.astro";
 
-const searchQuery = Astro.url.searchParams.get("q") || '';
+const searchQuery = Astro.url.searchParams.get("search") || "";
 ---
 
 <form class="relative flex items-center gap-2.5 w-full max-w-[310px]">
@@ -40,49 +40,57 @@ const searchQuery = Astro.url.searchParams.get("q") || '';
 
 <script>
     import { filterParamsUrlGenerator } from "../utils";
-    import { navigate } from 'astro:transitions/client';
+    import { navigate } from "astro:transitions/client";
 
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const region = urlParams.get("region");
-    const sort = urlParams.get("sort");
+    function initSearchHandling() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const region = urlParams.get("region");
+        const sort = urlParams.get("sort");
 
-    // Refs
-    const form: HTMLFormElement = document.querySelector('form')!;
-    const searchInput: HTMLInputElement = document.querySelector('input[name="search"]')!;
-    const resetButton = document.getElementById("reset-btn")!;
+        // Refs
+        const form: HTMLFormElement = document.querySelector("form")!;
+        const searchInput: HTMLInputElement = document.querySelector('input[name="search"]')!;
+        const resetButton = document.getElementById("reset-btn")!;
 
-    // Handle input value reset
-    function onResetSearch() {
-        if (searchInput.value === '' && urlParams.get("q")) {
-            const newQueryParams = filterParamsUrlGenerator({
-                search: undefined,
-                region: region,
-                sort: sort,
-            });
+        // Handle input value reset
+        function onResetSearch() {
+            if (searchInput.value === "" && urlParams.get("search")) {
+                const newQueryParams = filterParamsUrlGenerator({
+                    search: undefined,
+                    region: region,
+                    sort: sort,
+                });
 
-            navigate(newQueryParams ? `/?${newQueryParams}` : "/");
+                navigate(newQueryParams ? `/?${newQueryParams}` : "/");
+            }
+
+            searchInput.value = "";
         }
 
-        searchInput.value = '';
+        resetButton?.addEventListener("click", onResetSearch);
+
+        // Handle form submit
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const search = searchInput.value.toString();
+
+            if (search && search.trim().length > 0) {
+                const newQueryParams = filterParamsUrlGenerator({
+                    search: searchInput.value.toString(),
+                    region: region,
+                    sort: sort,
+                });
+
+                navigate(`/?${newQueryParams}`);
+            }
+        });
     }
 
-    resetButton?.addEventListener('click', onResetSearch);
+    // Initialize on first load
+    initSearchHandling();
 
-    // Handle form submit
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const search = searchInput.value.toString();
-
-        if (search && search.trim().length > 0) {
-            const newQueryParams = filterParamsUrlGenerator({
-                search: searchInput.value.toString(),
-                region: region,
-                sort: sort,
-            });
-
-            navigate(`/?${newQueryParams}`);
-        }
-    })
+    // Re-initialize after swapping pages
+    document.addEventListener("astro:after-swap", initSearchHandling);
 </script>

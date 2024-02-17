@@ -44,14 +44,14 @@ const { data: country } = await fetchCountryByName(id!);
 
 						<CountryBody
 							officialName={country[0].name.official}
-							population={formatNumber(country[0].population)}
+							population={country[0].population ? formatNumber(country[0].population) : "0"}
 							area={formatNumber(country[0].area) + " km²"}
 							coordinates={country[0].latlng}
 							timezones={country[0].timezones}
 							capital={country[0].capital}
 							capitalLocation={country[0].capitalInfo.latlng}
-							languages={Object.values(country[0].languages)}
-							currencies={Object.values(country[0].currencies)}
+							languages={country[0].languages ? Object.values(country[0].languages) : []}
+							currencies={country[0].currencies ? Object.values(country[0].currencies) : []}
 							carSide={country[0].car.side}
 							tld={country[0].tld}
 							idd={country[0].idd}
@@ -59,7 +59,7 @@ const { data: country } = await fetchCountryByName(id!);
 							cca3={country[0].cca3}
 							cca2={country[0].cca2}
 							postalCodeFormat={country[0].postalCode?.format}
-							gini={Object.entries(country[0].gini)}
+							gini={country[0].gini && Object.entries(country[0].gini)}
 						/>
 					</section>
 					<section class="w-full flex flex-col p-4">

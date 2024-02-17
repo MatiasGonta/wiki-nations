@@ -87,12 +87,12 @@ const {
                 <p class="flex flex-col">
                     <strong>Capital</strong>
                     <span class="ml-4">{capital}</span>
-                    <span class="ml-4">{capitalLocation}</span>
+                    {capitalLocation && <span class="ml-4">{capitalLocation}</span>}
                 </p>
             </li>
         }
         {
-            languages &&
+            languages && languages.length > 0 &&
             <li>
                 <strong>Languages</strong>
                 <ul class="ml-8 list-disc">
@@ -107,7 +107,7 @@ const {
             </li>
         }
         {
-            timezones &&
+            timezones && timezones.length > 0 &&
             <li>
                 <strong>Timezones</strong>
                 <ul class="ml-8 list-disc">

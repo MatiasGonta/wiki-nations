@@ -2,12 +2,19 @@
 import WikiNationsLogo from "../assets/wiki-nations.png";
 import Spin from "../icons/Spin.icon.astro";
 import ToggleMode from "./ToggleMode.astro";
+import { Image } from 'astro:assets';
 ---
 
 <header class="w-full max-w-[1300px] mx-auto flex flex-col gap-3 mt-8 px-8 min-[1300px]:px-0">
     <div class="w-full relative flex gap-2 justify-between items-center">
         <a href="/" class="flex gap-1.5 items-center select-none">
-            <img src={WikiNationsLogo.src} alt="WikiNations Logo" class="size-12 wiki-nations-logo" />
+            <Image
+                src={WikiNationsLogo}
+                alt="WikiNations Logo"
+                width={48}
+                height={48}
+                class="size-12 wiki-nations-logo"
+            />
             <h1 class="text-3xl font-bold">
                 <span class="bg-clip-text text-transparent drop-shadow-[1px_1px_0px_rgb(191,186,177)] dark:drop-shadow-[1px_1px_0px_rgba(217,192,162,1)] bg-center bg-[length:125%] bg-[url(/src/assets/wiki-nations.png)]">Wiki</span>
                 <span class="bg-clip-text text-transparent drop-shadow-[1px_1px_0px_rgb(191,186,177)] dark:drop-shadow-[1px_1px_0px_rgba(217,192,162,1)] bg-center bg-[length:125%] bg-[url(/src/assets/wiki-nations.png)]">Nations</span>

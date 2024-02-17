@@ -6,7 +6,7 @@ export function filterParamsUrlGenerator({ search, region, sort }: {
     const newQueryParams = new URLSearchParams();
   
     if (search && search.trim().length > 0) {
-      newQueryParams.append('q', search);
+      newQueryParams.append('search', search);
     }
 
     if (region && region === "Africa" || region === "Europe" || region === "Americas" || region === "Asia" || region === "Oceania" || region === "Antarctic") {

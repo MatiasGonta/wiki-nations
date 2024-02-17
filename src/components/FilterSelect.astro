@@ -12,7 +12,7 @@ const { filterType, options } = Astro.props;
 
 // Get query params
 const queryParams = {
-    search: Astro.url.searchParams.get("q"),
+    search: Astro.url.searchParams.get("search"),
     region: Astro.url.searchParams.get("region"),
     sort: Astro.url.searchParams.get("sort"),
 }

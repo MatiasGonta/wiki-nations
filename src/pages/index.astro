@@ -25,7 +25,7 @@ let filteredCountries: RawCountry[] = rawCountries.sort((countryA: RawCountry, c
 );
 
 // Get query params
-const searchQuery = Astro.url.searchParams.get("q");
+const searchQuery = Astro.url.searchParams.get("search");
 const regionQuery = Astro.url.searchParams.get("region");
 const sortQuery = Astro.url.searchParams.get("sort");
 
