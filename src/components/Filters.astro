@@ -1,0 +1,87 @@
+---
+import { FilterTypes, type FilterSelectOption } from "../types";
+import Antarctic from "../icons/Antarctic.icon.astro";
+import Americas from "../icons/Americas.icon.astro";
+import Europe from "../icons/Europe.icon.astro";
+import Africa from "../icons/Africa.icon.astro";
+import World from "../icons/World.icon.astro";
+import Oceania from "../icons/Oceania.astro";
+import Asia from "../icons/Asia.icon.astro";
+import FilterSelect from "./FilterSelect.astro";
+import Search from "./Search.astro";
+
+const regionOptions: FilterSelectOption[] = [
+        {
+            value: undefined,
+            label: "World",
+            icon: World,
+            iconClass: "size-[50px] absolute top-[35px] -left-1"
+        },
+        {
+            value: "Africa",
+            label: "Africa",
+            icon: Africa,
+            iconClass: "size-[140px] absolute -top-[26px] -left-12"
+        },
+        {
+            value: "Asia",
+            label: "Asia",
+            icon: Asia,
+            iconClass: "size-[110px] absolute -top-0 -left-14"
+        },
+        {
+            value: "Europe",
+            label: "Europe",
+            icon: Europe,
+            iconClass: "size-[230px] absolute -top-[13px] -left-[90px]"
+        },
+        {
+            value: "Americas",
+            label: "America",
+            icon: Americas,
+            iconClass: "size-[70px] absolute -top-0 left-1"
+        },
+        {
+            value: "Oceania",
+            label: "Oceania",
+            icon: Oceania,
+            iconClass: "size-[185px] absolute -top-[52px] -left-[135px]"
+        },
+        {
+            value: "Antarctic",
+            label: "Antarctic",
+            icon: Antarctic,
+            iconClass: "size-10 absolute -top-0 -left-0.5"
+        },
+    ];
+
+    const sortOptions: FilterSelectOption[] = [
+        {
+            value: undefined,
+            label: "Default",
+        },
+        {
+            value: "desc",
+            label: "Most populated",
+        },
+        {
+            value: "asc",
+            label: "Less populated",
+        },
+    ];
+---
+
+<div class="w-full">
+    <search class="w-full flex gap-2.5 flex-col items-center md:flex-row md: justify-between md:gap-0">
+        <Search />
+
+        <div class="flex items-center gap-2.5">
+            <FilterSelect filterType={FilterTypes.SORT} options={sortOptions}>
+                <span class="text-text-nations" slot="label">Sort by</span>
+            </FilterSelect>
+            <FilterSelect filterType={FilterTypes.REGION} options={regionOptions}>
+                <span class="text-text-nations" slot="label">Sort by region</span>
+            </FilterSelect>
+        </div>
+    </search>
+</div>

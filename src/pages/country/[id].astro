@@ -1,8 +1,10 @@
 ---
 import { fetchCountries, fetchCountryByName } from "../../services";
-import ContinentBadge from "../../components/ContinentBadge.astro";
+import CountryHeader from "../../components/CountryHeader.astro";
+import CountryBody from "../../components/CountryBody.astro";
+import Header from "../../components/Header.astro";
 import Layout from "../../layouts/Layout.astro";
-import { slide } from 'astro:transitions';
+import { formatNumber } from "../../utils";
 
 export async function getStaticPaths() {
 	const { data: countries } = await fetchCountries();
@@ -18,16 +20,65 @@ const { id } = Astro.params;
 
 // Fetch country with id
 const { data: country } = await fetchCountryByName(id!);
-console.log({ country: country[0] });
 ---
 
 <Layout title={`${id} | Wiki Nations`}>
-	<main class="w-full h-screen flex justify-center items-center">
-		<div class="w-[500px] h-[350px]" transition:name={country[0].name.common + "badge"}>
-			<img
-				src={country[0].flags.svg}
-				alt={country[0].flags.alt || country[0].name.common}
-			/>
-		</div>
-	</main>
+	<Header />
+	{
+		country[0]
+			? (
+				<main class="w-full max-w-[1360px] h-full mx-auto flex flex-col px-8 py-8 min-[1360px]:px-0 lg:flex-row">
+					<section class="lg:w-[365px] flex flex-col p-4 md:flex-row lg:flex-col gap-4">
+						<CountryHeader
+							name={country[0].name.common}
+							flag={country[0].flag}
+							countryFlag={country[0].flags.svg}
+							alt={country[0].flags.alt}
+							coatOfArmsFlag={country[0].coatOfArms.svg}
+							independent={country[0].independent}
+							region={country[0].region}
+							subregion={country[0].subregion}
+						/>
+
+						<div class="bg-[#ddd] dark:bg-text-nations mx-auto w-4/5 h-px block md:hidden lg:block" />
+
+						<CountryBody
+							officialName={country[0].name.official}
+							population={formatNumber(country[0].population)}
+							area={formatNumber(country[0].area) + " km²"}
+							coordinates={country[0].latlng}
+							timezones={country[0].timezones}
+							capital={country[0].capital}
+							capitalLocation={country[0].capitalInfo.latlng}
+							languages={Object.values(country[0].languages)}
+							currencies={Object.values(country[0].currencies)}
+							carSide={country[0].car.side}
+							tld={country[0].tld}
+							idd={country[0].idd}
+							ccn3={country[0].ccn3}
+							cca3={country[0].cca3}
+							cca2={country[0].cca2}
+							postalCodeFormat={country[0].postalCode?.format}
+							gini={Object.entries(country[0].gini)}
+						/>
+					</section>
+					<section class="w-full flex flex-col p-4">
+						<article class="w-full flex flex-col gap-4">
+							<div class="bg-white p-4 rounded-md border-b-4 border-b-gray-500 h-[874px]">
+								<iframe
+								  src={country[0].maps.openStreetMaps}
+								  width="100%"
+								  height="100%"
+								  style={{ border: 0 }}
+								  allowfullscreen
+								  loading="lazy"
+								></iframe>
+							</div>
+						</article>
+					</section>
+				</main>
+			) : (
+				<div>No country found</div>
+			)
+	}
 </Layout>

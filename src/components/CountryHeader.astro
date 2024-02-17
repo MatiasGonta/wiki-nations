@@ -1,0 +1,81 @@
+---
+import ContinentBadge from './ContinentBadge.astro';
+import type { Continents } from '../types';
+
+interface Props {
+    name: string;
+    flag: string;
+    countryFlag: string;
+    alt?: string;
+    coatOfArmsFlag: string;
+    independent: boolean;
+    region: Continents;
+    subregion: string;
+}
+
+const { name, flag, countryFlag, alt, coatOfArmsFlag, independent, region, subregion } = Astro.props;
+
+const iconClass = {
+    Africa: "size-[490px] -left-[147.5%] -top-[80%]",
+    Europe: "size-[700px] -left-[219%] -top-[25%]",
+    Americas: "size-[255px] -top-3 left-2",
+    Asia: "size-[325px] -left-[132.5%] top-[5%]",
+    Oceania: "size-[500px] -left-[300%] -top-[110%]",
+    Antarctic: "size-[130px] -left-[5%] top-[0%]",
+};
+---
+
+<article class="md:w-[330px] flex flex-col sm:max-h-[217px] md:max-h-fit sm:flex-row md:flex-col gap-4">
+    <div class="flex flex-col gap-2">
+        <div>
+            <h1 class="text-[35px] font-bold text-center text-nowrap">
+                {name} <span class="text-[20px]">{flag}</span>
+            </h1>
+        </div>
+        <div class="sm:h-[156px] md:h-auto" transition:name={name + "badge"}>
+            <img
+                src={countryFlag}
+                alt={alt || name}
+                class="rounded-md border border-[#ddd] dark:border-text-nations sm:h-[156px] md:h-auto"
+            />
+        </div>
+    </div>
+
+    <div class="bg-[#ddd] dark:bg-text-nations mx-auto w-4/5 h-px block sm:hidden md:block" />
+
+    <div class="flex flex-wrap gap-2 justify-center sm:justify-between sm:flex-nowrap">
+        <div class="bg-white max-w-[157px] h-full p-4 rounded-md border-b-4 border-b-gray-500 flex flex-col gap-2">
+            <div class="size-[125px] mx-auto">
+                <img
+                    src={coatOfArmsFlag}
+                    alt={'Coat of arms of ' + name}
+                    class="size-[125px]"
+                />
+            </div>
+            <ul>
+                <li>
+                    <strong>Coat of arms</strong>
+                </li>
+                <li>
+                    <span>{independent ? "Independent" : "Dependent"}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-white max-w-[157px] h-full p-4 rounded-md border-b-4 border-b-gray-500 flex flex-col gap-2">
+            <div class="relative mx-auto size-[125px] overflow-hidden">
+                <div class={`absolute ${iconClass[region]}`}>
+                    <ContinentBadge name={region} />
+                </div>
+            </div>
+            <ul>
+                <li>
+                    <strong>{region}</strong>
+                </li>
+                <li>
+                    <span>{subregion}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</article>

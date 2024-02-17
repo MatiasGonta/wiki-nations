@@ -1,112 +1,57 @@
 ---
-import { FilterTypes, type FilterSelectOption } from "../types";
-import Antarctic from "../icons/Antarctic.icon.astro";
-import Americas from "../icons/Americas.icon.astro";
-import Europe from "../icons/Europe.icon.astro";
-import Africa from "../icons/Africa.icon.astro";
-import World from "../icons/World.icon.astro";
-import Oceania from "../icons/Oceania.astro";
-import Asia from "../icons/Asia.icon.astro";
+import WikiNationsLogo from "../assets/wiki-nations.png";
 import Spin from "../icons/Spin.icon.astro";
-import FilterSelect from "./FilterSelect.astro";
-import Search from "./Search.astro";
-
-    const regionOptions: FilterSelectOption[] = [
-        {
-            value: undefined,
-            label: "World",
-            icon: World,
-            iconClass: "size-[50px] absolute top-[35px] -left-1"
-        },
-        {
-            value: "Africa",
-            label: "Africa",
-            icon: Africa,
-            iconClass: "size-[140px] absolute -top-[26px] -left-12"
-        },
-        {
-            value: "Asia",
-            label: "Asia",
-            icon: Asia,
-            iconClass: "size-[110px] absolute -top-0 -left-14"
-        },
-        {
-            value: "Europe",
-            label: "Europe",
-            icon: Europe,
-            iconClass: "size-[230px] absolute -top-[13px] -left-[90px]"
-        },
-        {
-            value: "Americas",
-            label: "America",
-            icon: Americas,
-            iconClass: "size-[70px] absolute -top-0 left-1"
-        },
-        {
-            value: "Oceania",
-            label: "Oceania",
-            icon: Oceania,
-            iconClass: "size-[185px] absolute -top-[52px] -left-[135px]"
-        },
-        {
-            value: "Antarctic",
-            label: "Antarctic",
-            icon: Antarctic,
-            iconClass: "size-10 absolute -top-0 -left-0.5"
-        },
-    ];
-
-    const sortOptions: FilterSelectOption[] = [
-        {
-            value: undefined,
-            label: "Default",
-        },
-        {
-            value: "desc",
-            label: "Most populated",
-        },
-        {
-            value: "asc",
-            label: "Less populated",
-        },
-    ];
+import ToggleMode from "./ToggleMode.astro";
 ---
 
-<header class="w-full max-w-[1300px] mx-auto flex flex-col gap-2 shadow-lg mt-8 px-8 min-[1300px]:px-0">
-    <div class="w-full relative">
-        <h1 class="text-3xl font-bold text-white">Wiki Nations</h1>
-
-        {/* Navigate loader */}
-        <div id="loader" class="hidden absolute top-1/2 -translate-y-1/2 right-0 items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-gray-500 hover:bg-gray-600 transition ease-in-out duration-150 cursor-not-allowed">
-            <div class="size-5">
-                <Spin />
+<header class="w-full max-w-[1300px] mx-auto flex flex-col gap-3 mt-8 px-8 min-[1300px]:px-0">
+    <div class="w-full relative flex gap-2 justify-between items-center">
+        <a href="/" class="flex gap-1.5 items-center select-none">
+            <img src={WikiNationsLogo.src} alt="WikiNations Logo" class="size-12 wiki-nations-logo" />
+            <h1 class="text-3xl font-bold">
+                <span class="bg-clip-text text-transparent drop-shadow-[1px_1px_0px_rgb(191,186,177)] dark:drop-shadow-[1px_1px_0px_rgba(217,192,162,1)] bg-center bg-[length:125%] bg-[url(/src/assets/wiki-nations.png)]">Wiki</span>
+                <span class="bg-clip-text text-transparent drop-shadow-[1px_1px_0px_rgb(191,186,177)] dark:drop-shadow-[1px_1px_0px_rgba(217,192,162,1)] bg-center bg-[length:125%] bg-[url(/src/assets/wiki-nations.png)]">Nations</span>
+            </h1>
+        </a>
+        
+        <div class="flex gap-2 items-center">
+            {/* Navigate loader */}
+            <div id="loader" class="hidden fixed top-2.5 right-2.5 items-center p-2 font-semibold leading-6 text-sm shadow rounded-md border border-gray-500 dark:border-text-nations text-white bg-gray-500 dark:bg-background-nations transition ease-in-out duration-150 cursor-not-allowed">
+                <div class="size-5">
+                    <Spin />
+                </div>
             </div>
-            <span>Loading...</span>
+
+            {/* Toggle mode */}
+            <ToggleMode />
         </div>
     </div>
-    <div class="w-full">
-        <search class="w-full flex gap-2.5 flex-col items-center md:flex-row md: justify-between md:gap-0">
-            <Search />
-
-            <div class="flex items-center gap-2.5">
-                <FilterSelect filterType={FilterTypes.SORT} options={sortOptions}>
-                    <span slot="label">Sort by</span>
-                </FilterSelect>
-                <FilterSelect filterType={FilterTypes.REGION} options={regionOptions}>
-                    <span slot="label">Sort by region</span>
-                </FilterSelect>
-            </div>
-        </search>
-    </div>
+    
+    <slot />
 </header>
 
+<style>
+    .wiki-nations-logo {
+        animation: roll 0.75s linear;   
+    }
+	@keyframes roll {
+  		0% {
+    		transform: translateX(-500%) rotate(0deg);
+  		}
+  		100% {
+    		transform: translateX(0%) rotate(360deg);
+ 		}
+	}
+</style>
+
 <script>
+    // Handle loader between pages
 	document.addEventListener('astro:before-preparation', () => {
-	  document.getElementById('loader')!.classList.remove('hidden');
-	  document.getElementById('loader')!.classList.add('inline-flex');
+	    document.getElementById('loader')!.classList.remove('hidden');
+	    document.getElementById('loader')!.classList.add('inline-flex');
 	});
 	document.addEventListener('astro:after-preparation', () => {
         document.getElementById('loader')!.classList.remove('inline-flex');
-	  document.getElementById('loader')!.classList.add('hidden');
+	    document.getElementById('loader')!.classList.add('hidden');
 	});
 </script>

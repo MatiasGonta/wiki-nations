@@ -1,8 +1,9 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Filters from "../components/Filters.astro";
 import Header from "../components/Header.astro";
-import Card from "../components/Card.astro";
+import Layout from "../layouts/Layout.astro";
 import { fetchCountries } from "../services";
+import Card from "../components/Card.astro";
 import type { RawCountry } from "../types";
 
 // Get countries
@@ -52,7 +53,7 @@ if (sortQuery && (sortQuery === "asc" || sortQuery === "desc")) {
 	} else {
 		filteredCountries = filteredCountries.filter(
 			(country) => country.population > 0,
-		);
+		);	
 		filteredCountries.sort(
 			(countryA, countryB) => countryB.population - countryA.population,
 		);
@@ -61,8 +62,10 @@ if (sortQuery && (sortQuery === "asc" || sortQuery === "desc")) {
 ---
 
 <Layout title="Wiki Nations">
-	<Header />
-	<main class="w-full flex justify-center items-center bg-[#13151a]">
+	<Header>
+		<Filters>
+	</Header>
+	<main class="w-full flex justify-center items-center">
 		<section>
 			<article>
 				{
