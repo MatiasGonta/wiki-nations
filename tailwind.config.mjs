@@ -10,6 +10,7 @@ export default {
 				'green-nations': 'var(--wiki-nations-green)',	
 				'amber-nations': 'var(--wiki-nations-amber)',
 				'background-nations': 'var(--wiki-nations-bg)',
+				'border-nations': 'var(--wiki-nations-border)',
 				'text-nations': 'var(--wiki-nations-text)',
 			},
 			keyframes: {

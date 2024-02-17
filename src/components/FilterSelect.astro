@@ -19,7 +19,7 @@ const queryParams = {
 ---
 
 <div class="relative w-[150px]">
-    <button class="flex gap-1.5 justify-between items-center px-2 w-[150px] h-10 bg-white dark:bg-background-nations border border-[#ddd] dark:border-text-nations rounded-md">
+    <button class="flex gap-1.5 justify-between items-center px-2 w-[150px] h-10 bg-white dark:bg-background-nations border border-border-nations rounded-md">
         <slot name="label" />
         <div class="size-5 mt-0.5">
             <ArrowDown />
@@ -27,7 +27,7 @@ const queryParams = {
     </button>
 
     <div class="group absolute top-0 pt-12 z-[200]">
-        <div class="transition-[height] overflow-hidden h-0 opacity-0 invisible w-[150px] p-0 rounded-md bg-white dark:bg-background-nations border border-[#ddd] dark:border-text-nations group-hover:p-2.5 group-hover:h-auto group-hover:opacity-100 group-hover:visible">
+        <div class="transition-[height] overflow-hidden h-0 opacity-0 invisible w-[150px] p-0 rounded-md bg-white dark:bg-background-nations border border-border-nations group-hover:p-2.5 group-hover:h-auto group-hover:opacity-100 group-hover:visible">
             <ul class="w-full flex flex-col gap-1">
                 {
                     options.map(({ label, value, icon: Icon, iconClass }: FilterSelectOption) => {
@@ -44,8 +44,8 @@ const queryParams = {
                                             ${
                                                 queryParams[filterType] &&
                                                 queryParams[filterType] === value
-                                                    ? "bg-slate-200 dark:bg-[#282c36] border-[#ddd] dark:border-text-nations"
-                                                    : "border-white dark:border-background-nations hover:bg-slate-200 hover:border-[#ddd] dark:hover:bg-[#282c36] dark:hover:border-text-nations"
+                                                    ? "bg-slate-200 dark:bg-[#282c36] border-border-nations"
+                                                    : "border-white dark:border-background-nations hover:bg-slate-200 hover:border-border-nations dark:hover:bg-[#282c36]"
                                             }
                                         `}
                                 >
